@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Swap - Attendance System</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap');
+         :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #2ecc71;
+            --signout-color: #e74c3c;
+            --text-color: #2c3e50;
+            --light-gray: #ecf0f1;
+            --medium-gray: #bdc3c7;
+            --dark-gray: #7f8c8d;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.92);
+            z-index: 0;
+        }
+        
+        .container {
+            position: relative;
+            width: 90%;
+            max-width: 600px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            z-index: 1;
+            margin: 20px 0;
+        }
+        
+        .header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+        
+        .company-logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .company-logo:hover {
+            transform: rotate(15deg) scale(1.1);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: white;
+        }
+        
+        .signin-btn {
+            background-color: var(--secondary-color);
+        }
+        
+        .signout-btn {
+            background-color: var(--signout-color);
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .action-btn:active {
+            transform: translateY(0);
+        }
+        
+        .form-content {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .btn-submit {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .signout-form .btn-submit {
+            background-color: var(--signout-color);
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: var(--dark-gray);
+            border-top: 1px solid var(--light-gray);
+        }
+        
+        .employee-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .employee-photo:hover {
+            transform: scale(1.05);
+        }
+        
+        .photo-placeholder {
+            font-size: 30px;
+            color: var(--medium-gray);
+        }
+        
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .success-message i {
+            font-size: 50px;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            animation: bounce 0.5s ease infinite alternate;
+        }
+        
+        .signout-success i {
+            color: var(--signout-color);
+        }
+        
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .success-message h2 {
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        
+        .success-message p {
+            color: var(--dark-gray);
+            line-height: 1.6;
+        }
+        
+        .datetime {
+            font-size: 12px;
+            color: var(--dark-gray);
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .robot-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            width: 100px;
+            height: 100px;
+            z-index: 10;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        .robot {
+            width: 100%;
+            height: 100%;
+            background-image: url('https://cdn-icons-png.flaticon.com/512/4712/4712035.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        /* Animation for success message */
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        /* Responsive adjustments */
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px 15px;
+            }
+            .header h1 {
+                font-size: 20px;
+                padding-top: 10px;
+            }
+            .company-logo {
+                top: 15px;
+                left: 15px;
+                width: 35px;
+                height: 35px;
+                font-size: 16px;
+            }
+            .form-content {
+                padding: 20px;
+            }
+            .action-buttons {
+                flex-direction: column;
+            }
+            .robot-container {
+                width: 80px;
+                height: 80px;
+                bottom: 10px;
+                right: 10px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        emailjs.init("OiT3U7kR8txef7ceo");
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="company-logo" id="companyLogo">SS</div>
+            <h1>SKILL SWAP ATTENDANCE</h1>
+        </div>
+
+        <div class="form-content">
+            <div class="employee-photo">
+                <div class="photo-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+
+            <div class="datetime" id="currentDatetime">
+                <!-- Date and time will be inserted here -->
+            </div>
+
+            <div class="action-buttons" id="actionButtons">
+                <button class="action-btn signin-btn" id="signInBtn">
+                    <i class="fas fa-sign-in-alt"></i> SIGN IN
+                </button>
+                <button class="action-btn signout-btn" id="signOutBtn">
+                    <i class="fas fa-sign-out-alt"></i> SIGN OUT
+                </button>
+            </div>
+
+            <form id="signInForm" style="display: none;">
+                <div class="form-group">
+                    <label for="employeeName">FULL NAME</label>
+                    <input type="text" id="employeeName" name="employeeName" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="employeeId">EMPLOYEE ID</label>
+                    <input type="text" id="employeeId" name="employeeId" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="department">DEPARTMENT</label>
+                    <select id="department" name="department" class="form-control" required>
+                        <option value="">Select Department</option>
+                        <option value="Marketing">Marketing</option>
+                        <option value="Biology">Biology</option>
+                        <option value="Programming">Programming</option>
+                        <option value="AI">AI</option>
+                        <option value="UI/Flutter">UI/Flutter</option>
+                        <option value="C">C</option>
+                        <option value="C++">C++</option>
+                        <option value="Java">Java</option>
+                        <option value="Python">Python</option>
+                        <option value="Other">Other (Specify Below)</option>
+                    </select>
+                </div>
+
+                <div id="otherDepartmentContainer" style="display: none;">
+                    <div class="form-group">
+                        <label for="otherDepartment">SPECIFY DEPARTMENT</label>
+                        <input type="text" id="otherDepartment" name="otherDepartment" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="task">TODAY'S MAIN TASK</label>
+                    <textarea id="task" name="task" rows="3" class="form-control" required placeholder="Describe your main task for today..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitSignInBtn">
+                    <i class="fas fa-check-circle"></i> SUBMIT SIGN IN
+                </button>
+            </form>
+
+            <form id="signOutForm" class="signout-form" style="display: none;">
+                <div class="form-group">
+                    <label for="signOutEmployeeId">EMPLOYEE ID</label>
+                    <input type="text" id="signOutEmployeeId" name="employeeId" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="completedTasks">COMPLETED TASKS</label>
+                    <textarea id="completedTasks" name="completedTasks" rows="3" class="form-control" required placeholder="What tasks did you complete today?"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="notes">NOTES</label>
+                    <textarea id="notes" name="notes" rows="2" class="form-control" placeholder="Any additional notes..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit" id="submitSignOutBtn">
+                    <i class="fas fa-check-circle"></i> SUBMIT SIGN OUT
+                </button>
+            </form>
+
+            <div class="success-message" id="signInSuccess">
+                <i class="fas fa-check-circle"></i>
+                <h2>WELCOME TO WORK!</h2>
+                <p id="signInSuccessText">Hello <strong id="signInSuccessName"></strong>, your sign in has been successfully recorded at <span id="signInSuccessTime"></span>.</p>
+                <p>We wish you a productive day at Skill Swap!</p>
+                <button class="btn-submit" id="newSignInBtn" style="margin-top: 20px; background-color: var(--accent-color);">
+                    <i class="fas fa-plus-circle"></i> NEW REGISTRATION
+                </button>
+            </div>
+
+            <div class="success-message signout-success" id="signOutSuccess" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <h2>THANK YOU FOR YOUR WORK!</h2>
+                <p id="signOutSuccessText">Goodbye <strong id="signOutSuccessName"></strong>, your sign out has been recorded at <span id="signOutSuccessTime"></span>.</p>
+                <p>We appreciate your hard work today. See you tomorrow!</p>
+                <button class="btn-submit" id="newSignOutBtn" style="margin-top: 20px; background-color: var(--signout-color);">
+                    <i class="fas fa-plus-circle"></i> NEW REGISTRATION
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; <span id="currentYear"></span> Skill Swap. All rights reserved.
+        </div>
+    </div>
+
+    <div class="robot-container">
+        <div class="robot"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+            // Set current date and time
+            function updateDateTime() {
+                const now = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                };
+                document.getElementById('currentDatetime').textContent = now.toLocaleDateString('en-US', options);
+            }
+
+            updateDateTime();
+            setInterval(updateDateTime, 60000); // Update every minute
+
+            // Department selection handler
+            const departmentSelect = document.getElementById('department');
+            const otherDepartmentContainer = document.getElementById('otherDepartmentContainer');
+
+            departmentSelect.addEventListener('change', function() {
+                if (this.value === 'Other') {
+                    otherDepartmentContainer.style.display = 'block';
+                    document.getElementById('otherDepartment').setAttribute('required', 'required');
+                } else {
+                    otherDepartmentContainer.style.display = 'none';
+                    document.getElementById('otherDepartment').removeAttribute('required');
+                }
+            });
+
+            // Form elements
+            const actionButtons = document.getElementById('actionButtons');
+            const signInBtn = document.getElementById('signInBtn');
+            const signOutBtn = document.getElementById('signOutBtn');
+            const signInForm = document.getElementById('signInForm');
+            const signOutForm = document.getElementById('signOutForm');
+            const signInSuccess = document.getElementById('signInSuccess');
+            const signOutSuccess = document.getElementById('signOutSuccess');
+            const companyLogo = document.getElementById('companyLogo');
+
+            // Sign In button click
+            signInBtn.addEventListener('click', function() {
+                actionButtons.style.display = 'none';
+                signInForm.style.display = 'block';
+                signOutForm.style.display = 'none';
+                signInSuccess.style.display = 'none';
+                signOutSuccess.style.display = 'none';
+            });
+
+            // Sign Out button click
+            signOutBtn.addEventListener('click', function() {
+                actionButtons.style.display = 'none';
+                signOutForm.style.display = 'block';
+                signInForm.style.display = 'none';
+                signInSuccess.style.display = 'none';
+                signOutSuccess.style.display = 'none';
+            });
+
+            // Sign In form submission
+            signInForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('submitSignInBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+
+                // Get form data
+                const departmentValue = departmentSelect.value === 'Other' ?
+                    document.getElementById('otherDepartment').value.trim() :
+                    departmentSelect.value;
+
+                const formData = {
+                    type: 'SIGN IN',
+                    employeeName: document.getElementById('employeeName').value.trim(),
+                    employeeId: document.getElementById('employeeId').value.trim(),
+                    department: departmentValue,
+                    task: document.getElementById('task').value.trim(),
+                    date: new Date().toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }),
+                    time: new Date().toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    })
+                };
+
+                // Validate form data
+                if (!formData.employeeName || !formData.employeeId || !formData.department || !formData.task) {
+                    alert('Please fill all required fields!');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> SUBMIT SIGN IN';
+                    return;
+                }
+
+                // Send email using EmailJS
+                emailjs.send('service_b3sqmpt', 'template_mg997i2', formData)
+                    .then(function(response) {
+                        console.log('SIGN IN SUCCESS!', response.status, response.text);
+
+                        // Show success message
+                        signInForm.style.display = 'none';
+                        document.getElementById('signInSuccessName').textContent = formData.employeeName;
+                        document.getElementById('signInSuccessTime').textContent = formData.time;
+                        signInSuccess.style.display = 'block';
+                        signInSuccess.classList.add('fade-in');
+                    })
+                    .catch(function(error) {
+                        console.log('SIGN IN FAILED...', error);
+                        alert('Failed to record sign in. Please check:\n1. Your internet connection\n2. EmailJS configuration\n3. Form fields validity');
+                    })
+                    .finally(function() {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> SUBMIT SIGN IN';
+                    });
+            });
+
+            // Sign Out form submission
+            signOutForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const submitBtn = document.getElementById('submitSignOutBtn');
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PROCESSING...';
+
+                // Get form data
+                const formData = {
+                    type: 'SIGN OUT',
+                    employeeId: document.getElementById('signOutEmployeeId').value.trim(),
+                    completedTasks: document.getElementById('completedTasks').value.trim(),
+                    notes: document.getElementById('notes').value.trim(),
+                    date: new Date().toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }),
+                    time: new Date().toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: true
+                    })
+                };
+
+                // Validate form data
+                if (!formData.employeeId || !formData.completedTasks) {
+                    alert('Please fill all required fields!');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> SUBMIT SIGN OUT';
+                    return;
+                }
+
+                // For demo purposes, we'll use the same name as sign in
+                const employeeName = "Employee"; // In real app, you'd fetch this from DB or storage
+
+                // Send email using EmailJS
+                emailjs.send('service_b3sqmpt', 'template_mg997i2', formData)
+                    .then(function(response) {
+                        console.log('SIGN OUT SUCCESS!', response.status, response.text);
+
+                        // Show success message
+                        signOutForm.style.display = 'none';
+                        document.getElementById('signOutSuccessName').textContent = employeeName;
+                        document.getElementById('signOutSuccessTime').textContent = formData.time;
+                        signOutSuccess.style.display = 'block';
+                        signOutSuccess.classList.add('fade-in');
+                    })
+                    .catch(function(error) {
+                        console.log('SIGN OUT FAILED...', error);
+                        alert('Failed to record sign out. Please check:\n1. Your internet connection\n2. EmailJS configuration\n3. Form fields validity');
+                    })
+                    .finally(function() {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-check-circle"></i> SUBMIT SIGN OUT';
+                    });
+            });
+
+            // New registration buttons
+            document.getElementById('newSignInBtn').addEventListener('click', resetForms);
+            document.getElementById('newSignOutBtn').addEventListener('click', resetForms);
+            companyLogo.addEventListener('click', resetForms);
+
+            function resetForms() {
+                signInForm.reset();
+                signOutForm.reset();
+                actionButtons.style.display = 'flex';
+                signInForm.style.display = 'none';
+                signOutForm.style.display = 'none';
+                signInSuccess.style.display = 'none';
+                signOutSuccess.style.display = 'none';
+                otherDepartmentContainer.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+
+</html>
